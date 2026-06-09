@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    background:#f8f9fa;
+    padding:40px 20px;
+    color:#333;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.header .logo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    background: #3b304e;
+    color: white;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.header h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.header p {
+    color: #666;
+    font-size: 14px;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+.container{
+    max-width: 1000px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 40px;
+}
+
+.formulario {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.carrinho {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    height: fit-content;
+    position: sticky;
+    top: 20px;
+}
+
+h2 {
+    font-size: 18px;
+    margin-bottom: 25px;
+    color: #333;
+    font-weight: 600;
+}
+
+h3 {
+    font-size: 13px;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+}
+
+.linha {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.grupo {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #333;
+}
+
+input, select {
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color 0.2s;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+}
+
+hr {
+    margin: 25px 0;
+    border: none;
+    border-top: 1px solid #e9ecef;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background: #0d6efd;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    transition: background 0.2s;
+}
+
+button:hover {
+    background: #0b5ed7;
+}
+
+.produto {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #e9ecef;
+    font-size: 13px;
+}
+
+.produto:last-child {
+    border: none;
+    margin-top: 10px;
+    padding-top: 10px;
+    font-weight: 600;
+    color: #333;
+}
+
+.opcoes {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 20px 0;
+}
+
+.opcoes label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    margin-bottom: 0;
+    font-weight: normal;
+}
+
+.opcoes input[type="checkbox"],
+.opcoes input[type="radio"] {
+    width: auto;
+    margin: 0;
+    cursor: pointer;
+}
+
+.cart-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    background: #e9ecef;
+    border-radius: 50%;
+    font-size: 16px;
+    font-weight: bold;
+    color: #666;
+}
+
+.cart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.producto-desc {
+    font-size: 12px;
+    color: #999;
+}
+
+footer {
+    text-align: center;
+    margin-top: 60px;
+    padding-top: 30px;
+    border-top: 1px solid #e9ecef;
+    font-size: 12px;
+    color: #999;
+}
+
+footer a {
+    color: #0d6efd;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .container {
+        grid-template-columns: 1fr;
+    }
+    
+    .carrinho {
+        position: static;
+    }
+    
+    .linha {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
+</head>
+<body>
+
+<div class="header">
+    <div class="logo">B</div>
+    <h1>Formulário de Checkout</h1>
+    <p>Abaixo está um exemplo de formulário construído inteiramente com controles de formulário. Cada grupo de formulário necessário possui um estado de validação que pode ser acionado ao tentar enviar o formulário sem preenchê-lo.</p>
+</div>
+
+<div class="container">
+    <form action="resultado.html" method="get">
+    <div class="formulario">
+
+        <h2>Endereço de Cobrança</h2>
+
+        <div class="linha">
+            <div class="grupo">
+                <label for="primeiro_nome">Primeiro nome</label>
+                <input type="text" id="primeiro_nome" name="primeiro_nome">
+            </div>
+
+            <div class="grupo">
+                <label for="sobrenome">Sobrenome</label>
+                <input type="text" id="sobrenome" name="sobrenome">
+            </div>
+        </div>
+
+        <div class="grupo">
+            <label for="email">E-mail <span style="color: #999;">(Opcional)</span></label>
+            <input type="email" id="email" name="email" placeholder="voce@exemplo.com">
+        </div>
+
+        <div class="grupo">
+            <label for="nome_usuario">Nome de usuário</label>
+            <input type="text" id="nome_usuario" name="nome_usuario" placeholder="Nome de usuário">
+        </div>
+
+        <div class="grupo">
+            <label for="endereco">Endereço</label>
+            <input type="text" id="endereco" name="endereco" placeholder="1234 Rua Principal">
+        </div>
+
+        <div class="grupo">
+            <label for="complemento">Complemento <span style="color: #999;">(Opcional)</span></label>
+            <input type="text" id="complemento" name="complemento" placeholder="Apartamento ou suíte">
+        </div>
+
+        <div class="linha">
+            <div class="grupo">
+                <label for="pais">País</label>
+                <select id="pais" name="pais">
+                    <option>Escolher...</option>
+                    <option>Brasil</option>
+                    <option>Portugal</option>
+                    <option>Argentina</option>
+                </select>
+            </div>
+
+            <div class="grupo">
+                <label for="regiao">Estado</label>
+                <select id="regiao" name="regiao">
+                    <option>Escolher...</option>
+                    <option>Acre (AC)</option>
+                    <option>Alagoas (AL)</option>
+                    <option>Amapá (AP)</option>
+                    <option>Amazonas (AM)</option>
+                    <option>Bahia (BA)</option>
+                    <option>Ceará (CE)</option>
+                    <option>Distrito Federal (DF)</option>
+                    <option>Espírito Santo (ES)</option>
+                    <option>Goiás (GO)</option>
+                    <option>Maranhão (MA)</option>
+                    <option>Mato Grosso (MT)</option>
+                    <option>Mato Grosso do Sul (MS)</option>
+                    <option>Minas Gerais (MG)</option>
+                    <option>Pará (PA)</option>
+                    <option>Paraíba (PB)</option>
+                    <option>Paraná (PR)</option>
+                    <option>Pernambuco (PE)</option>
+                    <option>Piauí (PI)</option>
+                    <option>Rio de Janeiro (RJ)</option>
+                    <option>Rio Grande do Norte (RN)</option>
+                    <option>Rio Grande do Sul (RS)</option>
+                    <option>Rondônia (RO)</option>
+                    <option>Roraima (RR)</option>
+                    <option>Santa Catarina (SC)</option>
+                    <option>São Paulo (SP)</option>
+                    <option>Sergipe (SE)</option>
+                    <option>Tocantins (TO)</option>
+                </select>
+            </div>
+
+            <div class="grupo">
+                <label for="cep">CEP</label>
+                <input type="text" id="cep" name="cep">
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="opcoes">
+            <label>
+                <input type="checkbox">
+                O endereço de entrega é o mesmo que o meu endereço de cobrança.
+            </label>
+
+            <label>
+                <input type="checkbox">
+                Guarde esta informação para a próxima vez.
+            </label>
+        </div>
+
+        <hr>
+
+        <h2>Pagamento</h2>
+
+        <div class="opcoes">
+            <label>
+                <input type="radio" id="pagamento_credito" name="pagamento" value="credito" checked>
+                Cartão de Crédito
+            </label>
+            <label>
+                <input type="radio" id="pagamento_debito" name="pagamento" value="debito">
+                Cartão de Débito
+            </label>
+            <label>
+                <input type="radio" id="pagamento_paypal" name="pagamento" value="paypal">
+                PayPal
+            </label>
+        </div>
+
+        <div class="linha">
+            <div class="grupo">
+                <label for="nome_cartao">Nome no cartão</label>
+                <input type="text" id="nome_cartao" name="nome_cartao" placeholder="Nome completo conforme exibido no cartão">
+            </div>
+        </div>
+
+        <div class="linha">
+            <div class="grupo">
+                <label for="numero_cartao">Número do cartão</label>
+                <input type="text" id="numero_cartao" name="numero_cartao">
+            </div>
+        </div>
+
+        <div class="linha">
+            <div class="grupo">
+                <label for="mes_validade">Validade</label>
+                <input type="number" id="mes_validade" name="mes_validade" min="1" max="12" placeholder="MM">
+            </div>
+
+            <div class="grupo">
+                <label for="ano_validade" style="visibility: hidden;">Ano</label>
+                <input type="number" id="ano_validade" name="ano_validade" min="2024" placeholder="YYYY">
+            </div>
+
+            <div class="grupo">
+                <label for="cvv">CVV</label>
+                <input type="text" id="cvv" name="cvv">
+            </div>
+        </div>
+
+        <hr>
+
+        <button type="submit">Continuar para o checkout</button>
+
+    </div>
+    </form>
+
+    <div class="carrinho">
+
+        <div class="cart-header">
+            <h2>Seu carrinho</h2>
+            <div class="cart-icon">3</div>
+        </div>
+
+        <div class="produto">
+            <span>Nome do produto<br><span class="producto-desc">Descrição breve</span></span>
+            <span>R$ 50,00</span>
+        </div>
+
+        <div class="produto">
+            <span>Segundo produto<br><span class="producto-desc">Descrição breve</span></span>
+            <span>R$ 80,00</span>
+        </div>
+
+        <div class="produto">
+            <span>Terceiro item<br><span class="producto-desc">Descrição breve</span></span>
+            <span>R$ 30,00</span>
+        </div>
+
+        <div class="opcoes" style="margin: 20px 0; border-top: 1px solid #e9ecef; padding-top: 15px;">
+            <label style="color: #0d6efd; font-weight: 600;">
+                <input type="text" style="flex: 1; margin-right: 8px; width: 120px; padding: 6px;" placeholder="Código de desconto" name="promo">
+                <span style="display: none;">Resgatar</span>
+            </label>
+            <button type="button" style="width: auto; padding: 6px 15px; background: #666; margin-top: 8px;">Resgatar</button>
+        </div>
+
+        <div class="produto" style="border-top: 1px solid #e9ecef; padding-top: 15px; margin-top: 15px;">
+            <span>Total (BRL)</span>
+            <span>R$ 160,00</span>
+        </div>
+
+    </div>
+
+</div>
+
+<footer>
+    © 2017-2018 Nome da Empresa<br>
+    <a href="#">Privacidade</a> <a href="#">Termos</a> <a href="#">Suporte</a>
+</footer>
+
+</body>
+</html>
